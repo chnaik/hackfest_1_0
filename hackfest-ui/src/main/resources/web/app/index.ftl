@@ -114,7 +114,7 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <a href="#" class="btn btn-success ">View More...</a>
+                                            <a href="http://ekl-lm-app-001-stage.ch.flipkart.com/index.php/unanswered/tagged/stretchassignment/" class="btn btn-success ">View More...</a>
                                         </div>
                                     </div>
                                 </div>
@@ -133,7 +133,7 @@
                                     <h4>Top 3 questions</h4>
                                     <ul>
                                         <#list questions as question>
-                                            <li><a href="teck_forum.html">${question}</a></li>
+                                            <li><a href="http://ekl-lm-app-001-stage.ch.flipkart.com/index.php/unanswered/">${question}</a></li>
                                         </#list>
                                     </ul>
                                     <hr/>

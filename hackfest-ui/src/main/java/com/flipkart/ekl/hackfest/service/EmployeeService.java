@@ -22,8 +22,8 @@ public class EmployeeService {
 
     private static final String TF_HOST_URL_PREFIX = "http://ekl-lm-app-001-stage.ch.flipkart.com";
 
-    private static final String TF_GET_STRETCH_ASSIGNMENTS_URI = "";
-    private static final String TF_GET_QUESTIONS_URI = "/fetch_question_by_tags.php";
+    private static final String TF_GET_STRETCH_ASSIGNMENTS_URI = "/fetch_stretch_assgn.php?tags[]=java";
+    private static final String TF_GET_QUESTIONS_URI = "/fetch_question_by_tags.php?tags[]=ruby";
 
     public List<Skill> getSkillListForUser(String emailId) throws Exception {
         String url = StringFormatter.format(CORE_HOST_URL_PREFIX + CORE_GET_SKILLS_URI, emailId).getValue();
@@ -39,15 +39,22 @@ public class EmployeeService {
         return skills;
     }
 
-    public List<StretchAssignment> getStretchAssignmentList(String... tags) throws Exception {
-        String url = StringFormatter.format(TF_HOST_URL_PREFIX + TF_GET_STRETCH_ASSIGNMENTS_URI, tags).getValue();
+    public List<StretchAssignment> getStretchAssignmentList(String[] tags) throws Exception {
+        StringBuilder tagsParams = new StringBuilder();
+        for(String tag: tags) {
+            tagsParams.append("tag[]=" + tag + "&");
+        }
+        String tagsAsString = tagsParams.toString();
+        tagsAsString = tagsAsString.substring(0, tagsAsString.length() - 1);
+        String url = TF_HOST_URL_PREFIX + TF_GET_STRETCH_ASSIGNMENTS_URI;
+
         ApacheHttpClient apacheHttpClient = new ApacheHttpClient();
         String response = HttpClientUtils.processResponse(apacheHttpClient.get(url, null), "Error while getting stretch assignments");
         JSONArray jsonArray = new JSONArray(response);
         List<StretchAssignment> stretchAssignments = new ArrayList<StretchAssignment>();
         for(Object jsonObject: jsonArray) {
-            StretchAssignment stretchAssignment = new StretchAssignment(((JSONObject) jsonObject).get("TODO").toString(),
-                    ((JSONObject) jsonObject).get("//TODO").toString());
+            StretchAssignment stretchAssignment = new StretchAssignment(((JSONObject) jsonObject).get("title").toString(),
+                    ((JSONObject) jsonObject).get("a_tags").toString());
             stretchAssignments.add(stretchAssignment);
         }
         return stretchAssignments;
@@ -56,17 +63,17 @@ public class EmployeeService {
     public List<String> getQuestions(String... tags) throws Exception {
         StringBuilder tagParams = new StringBuilder();
         for(String tag: tags) {
-            tagParams.append("tag[]=%s&");
+            tagParams.append("tag[]=" + tag + "&");
         }
         String tagsAsString = tagParams.toString();
         tagsAsString = tagsAsString.substring(0, tagsAsString.length() - 1);
-        String url = StringFormatter.format(TF_HOST_URL_PREFIX + TF_GET_QUESTIONS_URI + tagsAsString, tags).getValue();
+        String url = TF_HOST_URL_PREFIX + TF_GET_QUESTIONS_URI;
         ApacheHttpClient apacheHttpClient = new ApacheHttpClient();
         String response = HttpClientUtils.processResponse(apacheHttpClient.get(url, null), "Error while getting stretch assignments");
         JSONArray jsonArray = new JSONArray(response);
         List<String> questions = new ArrayList<String>();
         for(Object jsonObject: jsonArray) {
-            questions.add(((JSONObject) jsonObject).get("//TODO").toString());
+            questions.add(((JSONObject) jsonObject).get("title").toString());
         }
         return questions;
     }

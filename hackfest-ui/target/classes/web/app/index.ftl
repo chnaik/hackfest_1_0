@@ -114,7 +114,7 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <a href="#" class="btn btn-success ">View More...</a>
+                                            <a href="http://ekl-lm-app-001-stage.ch.flipkart.com/index.php/unanswered/tagged/stretchassignment/" class="btn btn-success ">View More...</a>
                                         </div>
                                     </div>
                                 </div>
@@ -132,9 +132,9 @@
                                 <div class="alert alert-warning">
                                     <h4>Top 3 questions</h4>
                                     <ul>
-                                        <li><a href="teck_forum.html">What is Ekart Tech fest?</a></li>
-                                        <li><a href="teck_forum.html">How to use user service in flipkart?</a></li>
-                                        <li><a href="teck_forum.html">Resize image proportionally with CSS?</a></li>
+                                        <#list questions as question>
+                                            <li><a href="http://ekl-lm-app-001-stage.ch.flipkart.com/index.php/unanswered/">${question}</a></li>
+                                        </#list>
                                     </ul>
                                     <hr/>
                                     <a href="#" class="btn btn-warning ">View more...</a>

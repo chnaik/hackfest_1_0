@@ -34,11 +34,12 @@ public class DashboardResource {
         List<String> questions = new ArrayList<String>();
         try {
             allSkills = employeeService.getSkillListForUser(emailId);
-            String[] skillNames = new String[allSkills.size()];
+            String[] skillNames = new String[allSkills.size()+1];
             int counter = 0;
             for (Skill skill: allSkills) {
                 skillNames[counter++] = skill.getName();
             }
+            skillNames[allSkills.size()] = "java";
             stretchAssignments = employeeService.getStretchAssignmentList(skillNames);
             questions = employeeService.getQuestions(skillNames);
         } catch (Exception e) {

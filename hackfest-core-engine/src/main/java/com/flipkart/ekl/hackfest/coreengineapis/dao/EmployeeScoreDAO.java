@@ -27,8 +27,11 @@ public class EmployeeScoreDAO extends AbstractDAO<EmployeeScore> {
         if (employeeScoreOld == null) {
             persist(employeeScore);
         } else {
+            employeeScore.setId(employeeScoreOld.getId());
             currentSession().buildLockRequest(LockOptions.UPGRADE).setTimeOut(100).lock(employeeScoreOld);
             currentSession().merge(employeeScore);
         }
     }
+    
+    
 }
