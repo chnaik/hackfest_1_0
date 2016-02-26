@@ -9,6 +9,7 @@ import com.flipkart.ekl.hackfest.coreengineapis.dao.EmployeeScoreDAO;
 import com.flipkart.ekl.hackfest.coreengineapis.dao.LMSScoreDAO;
 import com.flipkart.ekl.hackfest.coreengineapis.request.LMSSkillRequest;
 import com.flipkart.ekl.hackfest.coreengineapis.request.TechForumRequest;
+import com.flipkart.ekl.hackfest.coreengineapis.service.ScoreEngineService;
 import io.dropwizard.hibernate.UnitOfWork;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -96,5 +97,11 @@ public class EmployeeScoreResource {
         return Response.status(status).entity(new HttpResponse(status.getStatusCode(), status.getReasonPhrase())).build();
     }
 
+    @POST
+    @Path("/update/overall")
+    @UnitOfWork
+    public void updateOverAllScore() {
+        new ScoreEngineService(employeeScoreDAO).refreshScores();
+    }
 
 }

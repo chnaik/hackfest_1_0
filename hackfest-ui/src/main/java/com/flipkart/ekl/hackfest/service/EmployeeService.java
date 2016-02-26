@@ -23,7 +23,7 @@ public class EmployeeService {
     private static final String TF_HOST_URL_PREFIX = "http://ekl-lm-app-001-stage.ch.flipkart.com";
 
     private static final String TF_GET_STRETCH_ASSIGNMENTS_URI = "";
-    private static final String TF_GET_QUESTIONS_URI = "";
+    private static final String TF_GET_QUESTIONS_URI = "/fetch_question_by_tags.php";
 
     public List<Skill> getSkillListForUser(String emailId) throws Exception {
         String url = StringFormatter.format(CORE_HOST_URL_PREFIX + CORE_GET_SKILLS_URI, emailId).getValue();
@@ -54,7 +54,13 @@ public class EmployeeService {
     }
 
     public List<String> getQuestions(String... tags) throws Exception {
-        String url = StringFormatter.format(TF_HOST_URL_PREFIX + TF_GET_QUESTIONS_URI, tags).getValue();
+        StringBuilder tagParams = new StringBuilder();
+        for(String tag: tags) {
+            tagParams.append("tag[]=%s&");
+        }
+        String tagsAsString = tagParams.toString();
+        tagsAsString = tagsAsString.substring(0, tagsAsString.length() - 1);
+        String url = StringFormatter.format(TF_HOST_URL_PREFIX + TF_GET_QUESTIONS_URI + tagsAsString, tags).getValue();
         ApacheHttpClient apacheHttpClient = new ApacheHttpClient();
         String response = HttpClientUtils.processResponse(apacheHttpClient.get(url, null), "Error while getting stretch assignments");
         JSONArray jsonArray = new JSONArray(response);
