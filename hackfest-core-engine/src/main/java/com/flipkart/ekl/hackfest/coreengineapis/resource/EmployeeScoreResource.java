@@ -7,7 +7,9 @@ import com.flipkart.ekl.hackfest.coreengineapis.core.LMSScore;
 import com.flipkart.ekl.hackfest.coreengineapis.dao.EmployeeDAO;
 import com.flipkart.ekl.hackfest.coreengineapis.dao.EmployeeScoreDAO;
 import com.flipkart.ekl.hackfest.coreengineapis.dao.LMSScoreDAO;
+import com.flipkart.ekl.hackfest.coreengineapis.request.EmployeeRequest;
 import com.flipkart.ekl.hackfest.coreengineapis.request.LMSSkillRequest;
+import com.flipkart.ekl.hackfest.coreengineapis.request.Leader;
 import com.flipkart.ekl.hackfest.coreengineapis.request.TechForumRequest;
 import com.flipkart.ekl.hackfest.coreengineapis.service.ScoreEngineService;
 import io.dropwizard.hibernate.UnitOfWork;
@@ -97,11 +99,42 @@ public class EmployeeScoreResource {
         return Response.status(status).entity(new HttpResponse(status.getStatusCode(), status.getReasonPhrase())).build();
     }
 
-    @POST
+    @GET
     @Path("/update/overall")
     @UnitOfWork
     public void updateOverAllScore() {
-        new ScoreEngineService(employeeScoreDAO).refreshScores();
+        try {new ScoreEngineService(employeeScoreDAO).refreshScores();}catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @GET
+    @Path("/get/leaders")
+    @UnitOfWork
+    public List<Leader> getAllLeaders() {
+        List<Leader> leaders = new ArrayList<Leader>();
+        List<EmployeeScore> employeeScores = employeeScoreDAO.getByScoreType(EmployeeScore.ScoreType.PERCENTILE.toString());
+        for(EmployeeScore employeeScore: employeeScores) {
+            leaders.add(new Leader(employeeScore.getEmployee().getName(), employeeScore.getScore_value() * 0.05));
+        }
+        return leaders;
+    }
+
+    @GET
+    @Path("/{emailId}/get")
+    @UnitOfWork
+    public EmployeeRequest getEmployeeScore(@PathParam("emailId") String emailId) {
+
+        Employee employee = employeeDAO.getByEmailId(emailId);
+        EmployeeScore employeeScore = employeeScoreDAO.getByScoreTypeAndEmployeeId(EmployeeScore.ScoreType.OVERALL_SCORE.toString(),
+                employee.getId());
+        EmployeeRequest employeeRequest = new EmployeeRequest();
+        employeeRequest.setName(employee.getName());
+        employeeRequest.setScore(employeeScore.getScore_value());
+        EmployeeScore employeeScorePercentile = employeeScoreDAO.getByScoreTypeAndEmployeeId(EmployeeScore.ScoreType.PERCENTILE.toString(),
+                employee.getId());
+        employeeRequest.setPercentile(employeeScorePercentile.getScore_value());
+        return employeeRequest;
     }
 
 }

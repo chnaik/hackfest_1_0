@@ -11,7 +11,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Dashboard Template for Bootstrap</title>
+    <title>Employee Performance Dashboard</title>
 
     <!-- Bootstrap core CSS -->
     <!--<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">-->
@@ -64,7 +64,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="main">
-            <h1 class="page-header">Dashboard</h1>
+            <h2 class="page-header">Hello ${employee.name}, Your overall score is ${employee.score} and percentile is ${employee.percentile}</h2>
 
 
             <div class="row">
@@ -238,7 +238,7 @@
                                             <tr>
                                                 <td>${leader?index + 1}</td>
                                                 <td>${leader.name}</td>
-                                                <td><div class="rateYo"></div></td>
+                                                <td><div class="rateYo" value="${leader.rating}"><input type="hidden" value="${leader.rating}"/></div></td>
                                             </tr>
                                         </#list>
                                         </tbody>
@@ -294,11 +294,13 @@
         };
         var ctx = document.getElementById("myChart").getContext("2d");
         var myLineChart = new Chart(ctx).Line(data);
-            $(".rateYo").rateYo({
-                rating: 3.7,
+        $.each($('.rateYo'), function() {
+            $(this).rateYo({
+                rating: $(this).children().val(),
                 readOnly: true,
                 starWidth: "20px"
             });
+        });
     });
 </script>
 </body>

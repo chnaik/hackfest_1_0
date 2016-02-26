@@ -22,15 +22,17 @@ public class DashboardView  extends View {
     private List<Leader> leaders = new ArrayList<Leader>();
     private List<String> questions = new ArrayList<String>();
 
-    public DashboardView(List<Skill> allSkills, List<StretchAssignment> stretchAssignmentList, List<String> questions) {
+    public DashboardView(List<Skill> allSkills, List<StretchAssignment> stretchAssignmentList, List<String> questions,
+                         List<Leader> leaders, Employee employee) {
         super("dashboard-view.ftl");
-        init(allSkills);
         this.stretchAssignmentList.addAll(stretchAssignmentList);
         this.questions.addAll(questions);
+        this.leaders.addAll(leaders);
+        this.employee = employee;
+        init(allSkills);
     }
 
     private void init(List<Skill> allSkills) {
-        employee = new Employee();
         int size = allSkills.size();
         Collections.sort(allSkills);
         List<Skill> skills = new ArrayList<Skill>();
@@ -45,13 +47,5 @@ public class DashboardView  extends View {
         if (size > 2) skills.add(allSkills.get(2));
         employee.setRecommendedSkills(skills);
 
-//        stretchAssignmentList.add(new StretchAssignment("Studio 34 App", "Android"));
-//        stretchAssignmentList.add(new StretchAssignment("Hackfest Site", "JS"));
-//        stretchAssignmentList.add(new StretchAssignment("Cron", "Ruby"));
-
-        leaders.add(new Leader("Chaitanya", 3.7f));
-        leaders.add(new Leader("Shashank", 3.7f));
-        leaders.add(new Leader("Rahul", 3.7f));
-        leaders.add(new Leader("Test", 5f));
     }
 }

@@ -18,7 +18,10 @@ public class EmployeeScore {
     private int id;
     public enum ScoreType {
         TECH_FORUM,
-        STRETCH_ASSIGNMENT
+        STRETCH_ASSIGNMENT,
+        OVERALL_SCORE,
+        PERCENTILE, PRODUCTIVITY,SKILLS
+
     }
 
     private String score_type;

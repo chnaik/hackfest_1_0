@@ -12,7 +12,6 @@ public class ScoreEngineService {
     private EmployeeScoreDAO employeeScoreDAO;
 
     public void refreshScores() {
-
-
+        employeeScoreDAO.upsert();
     }
 }

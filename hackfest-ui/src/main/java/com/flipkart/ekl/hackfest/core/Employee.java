@@ -13,4 +13,7 @@ public class Employee {
     private List<Skill> skills;
     private List<Skill> recommendedSkills;
     private Map<String, String> productivityHistoryMap;
+    private String name;
+    private double score;
+    private double percentile;
 }

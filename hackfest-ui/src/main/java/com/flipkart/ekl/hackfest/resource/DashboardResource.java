@@ -4,6 +4,8 @@ package com.flipkart.ekl.hackfest.resource;
  * Created by chaitanya.naik on 25/02/16.
  */
 
+import com.flipkart.ekl.hackfest.core.Employee;
+import com.flipkart.ekl.hackfest.core.Leader;
 import com.flipkart.ekl.hackfest.core.Skill;
 import com.flipkart.ekl.hackfest.core.StretchAssignment;
 import com.flipkart.ekl.hackfest.service.EmployeeService;
@@ -32,6 +34,8 @@ public class DashboardResource {
         List<Skill> allSkills = new ArrayList<Skill>();
         List<StretchAssignment> stretchAssignments = new ArrayList<StretchAssignment>();
         List<String> questions = new ArrayList<String>();
+        List<Leader> leaders = new ArrayList<Leader>();
+        Employee employee = new Employee();
         try {
             allSkills = employeeService.getSkillListForUser(emailId);
             String[] skillNames = new String[allSkills.size()+1];
@@ -42,10 +46,12 @@ public class DashboardResource {
             skillNames[allSkills.size()] = "java";
             stretchAssignments = employeeService.getStretchAssignmentList(skillNames);
             questions = employeeService.getQuestions(skillNames);
+            leaders = employeeService.getAllLeaders();
+            employee = employeeService.getEmployeeDetails(emailId);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return new DashboardView(allSkills, stretchAssignments, questions);
+        return new DashboardView(allSkills, stretchAssignments, questions, leaders, employee);
     }
 
 }
