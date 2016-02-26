@@ -11,7 +11,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Employee Performance Dashboard</title>
+    <title>Gameo</title>
 
     <!-- Bootstrap core CSS -->
     <!--<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">-->
@@ -49,14 +49,9 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Dashboard</a></li>
-                <li><a href="#">Settings</a></li>
-                <li><a href="#">Profile</a></li>
-                <li><a href="#">Help</a></li>
+                <li><a href="#" onclick="signOut();">Sign out</a>
+                </li>
             </ul>
-            <form class="navbar-form navbar-right">
-                <input type="text" class="form-control" placeholder="Search...">
-            </form>
         </div>
     </div>
 </nav>
@@ -64,7 +59,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="main">
-            <h2 class="page-header">Hello ${employee.name}, Your overall score is ${employee.score} and percentile is ${employee.percentile}</h2>
+            <h4 class="page-header">Hello ${employee.name}, Your overall score is ${employee.score} and percentile is ${employee.percentile}</h4>
 
 
             <div class="row">
@@ -175,7 +170,7 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <a href="#" class="btn btn-success ">View Details</a>
+                                            <a href="#" class="btn btn-success ">View More...</a>
                                         </div>
                                     </div>
                                     <div class="panel panel-default">
@@ -203,7 +198,7 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <a href="#" class="btn btn-success ">More Details</a>
+                                            <a href="#" class="btn btn-success ">View More...</a>
                                         </div>
                                     </div>
                                 </div>
@@ -262,11 +257,33 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/js/bootstrap.min.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.0.1/jquery.rateyo.min.js"></script>
+<script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
+<script>
+    function onLoad() {
+        gapi.load('auth2', function() {
+            gapi.auth2.init({
+            client_id: '1039857374119-7cvdetqsa9mfb7lo4ken8va0umkeupls.apps.googleusercontent.com'
+        });
+        })}
+//    window.onLoadCallback = function(){
+//        gapi.auth2.init({
+//            client_id: 'filler_text_for_client_id.apps.googleusercontent.com'
+//        });
+//    }
+</script>
+<script>
+    function signOut() {
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(function () {
+            console.log('User signed out.');
+            window.location.replace("http://localhost:8080/web/app/login.html");
+        });
+    }
 
+</script>
 <script>
     $(document).ready(function () {
 
-            console.log("Hello: ");
         var data = {
             labels: ["January", "February", "March", "April", "May", "June", "July"],
             datasets: [
