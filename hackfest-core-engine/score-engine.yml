@@ -1,0 +1,65 @@
+server:
+  type: simple
+  rootPath: /*
+  applicationContextPath: /
+  connector:
+   type: http
+   port: 9090
+
+# Logging settings.
+logging:
+
+  # The default level of all loggers. Can be OFF, ERROR, WARN, INFO, DEBUG, TRACE, or ALL.
+  level: DEBUG
+
+  # Logger-specific levels.
+  loggers:
+
+    # Sets the level for 'com.example.app' to DEBUG.
+    com.example.app: DEBUG
+
+    # Redirects SQL logs to a separate file
+    org.hibernate.SQL:
+      level: DEBUG
+
+#http:
+#  port: 9090
+#  adminPort: 9091
+
+
+database:
+  # the name of your JDBC driver
+  driverClass: com.mysql.jdbc.Driver
+
+  # the username
+  user: myuser
+
+  # the password
+  password: welcome1
+
+  # the JDBC URL
+  url: jdbc:mysql://localhost/performance
+
+  # the maximum amount of time to wait on an empty pool before throwing an exception
+  maxWaitForConnection: 1s
+
+
+  # the SQL query to run when validating a connection's liveness
+  validationQuery: "/* MyApplication Health Check */ SELECT 1"
+
+  # the minimum number of connections to keep open
+  minSize: 8
+
+  # the maximum number of connections to keep open
+  maxSize: 32
+
+  # whether or not idle connections should be validated
+  checkConnectionWhileIdle: true
+
+  # Whether or not connections will be validated before being borrowed from the pool. If the connection fails to validate,
+  # it will be dropped from the pool, and another will be borrowed.
+  checkConnectionOnBorrow: true
+
+  # Whether or not connections will be validated after being returned to the pool. If the connection fails to validate,
+  # it will be dropped from the pool.
+  checkConnectionOnReturn: true

@@ -1,0 +1,1 @@
+<#include "/web/app/index.ftl">
