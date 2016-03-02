@@ -12,9 +12,7 @@ import com.flipkart.ekl.hackfest.service.EmployeeService;
 import com.flipkart.ekl.hackfest.views.DashboardView;
 import io.dropwizard.hibernate.UnitOfWork;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,9 +24,10 @@ public class DashboardResource {
     String emailId = "rahul.jain@flipkart.com";
 
     @GET
+    //@Path("/{emailId}")
     @UnitOfWork
     @Produces(MediaType.TEXT_HTML)
-    public DashboardView getDashboardView()
+    public DashboardView getDashboardView(@QueryParam("emailId") String emailId)
     {
         EmployeeService employeeService = new EmployeeService();
         List<Skill> allSkills = new ArrayList<Skill>();
@@ -44,10 +43,10 @@ public class DashboardResource {
                 skillNames[counter++] = skill.getName();
             }
             skillNames[allSkills.size()] = "java";
-            stretchAssignments = employeeService.getStretchAssignmentList(skillNames);
             questions = employeeService.getQuestions(skillNames);
             leaders = employeeService.getAllLeaders();
             employee = employeeService.getEmployeeDetails(emailId);
+            stretchAssignments = employeeService.getStretchAssignmentList(skillNames);
         } catch (Exception e) {
             e.printStackTrace();
         }

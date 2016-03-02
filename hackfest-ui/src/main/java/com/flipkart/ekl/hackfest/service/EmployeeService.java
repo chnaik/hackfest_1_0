@@ -6,7 +6,6 @@ import com.flipkart.ekl.hackfest.core.Leader;
 import com.flipkart.ekl.hackfest.core.Skill;
 import com.flipkart.ekl.hackfest.core.StretchAssignment;
 import com.flipkart.ekl.hackfest.util.HttpClientUtils;
-import com.sun.javafx.binding.StringFormatter;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -19,7 +18,7 @@ import java.util.List;
  */
 public class EmployeeService {
 
-    private static final String CORE_HOST_URL_PREFIX = "http://172.17.92.120:9090";
+    private static final String CORE_HOST_URL_PREFIX = "http://localhost:9090";
 
     private static final String CORE_GET_SKILLS_URI = "/employee/score/%s/lms";
     private static final String CORE_GET_LEADERS_URI = "/employee/score/get/leaders";
@@ -31,7 +30,7 @@ public class EmployeeService {
     private static final String TF_GET_QUESTIONS_URI = "/fetch_question_by_tags.php?tags[]=ruby";
 
     public List<Skill> getSkillListForUser(String emailId) throws Exception {
-        String url = StringFormatter.format(CORE_HOST_URL_PREFIX + CORE_GET_SKILLS_URI, emailId).getValue();
+        String url = String.format(CORE_HOST_URL_PREFIX + CORE_GET_SKILLS_URI, emailId);
         ApacheHttpClient apacheHttpClient = new ApacheHttpClient();
         String response = HttpClientUtils.processResponse(apacheHttpClient.get(url, null), "Error while getting skills");
         JSONArray jsonArray = new JSONArray(response);
@@ -58,8 +57,16 @@ public class EmployeeService {
         JSONArray jsonArray = new JSONArray(response);
         List<StretchAssignment> stretchAssignments = new ArrayList<StretchAssignment>();
         for(Object jsonObject: jsonArray) {
+            String res = "";
+            for (String str : ((JSONObject) jsonObject).get("a_tags").toString().substring(1, ((JSONObject) jsonObject).get("a_tags").toString().length() - 1).split(",")) {
+                res += str.substring(1,str.length()-1) + ", ";
+
+            }
+            res = res.substring(0,res.length()-2);
+
             StretchAssignment stretchAssignment = new StretchAssignment(((JSONObject) jsonObject).get("title").toString(),
-                    ((JSONObject) jsonObject).get("a_tags").toString());
+                    res);
+
             stretchAssignments.add(stretchAssignment);
         }
         return stretchAssignments;
@@ -100,7 +107,7 @@ public class EmployeeService {
     }
 
     public Employee getEmployeeDetails(String emailId) throws Exception {
-        String url = StringFormatter.format(CORE_HOST_URL_PREFIX + CORE_GET_EM_DETAILS_URI, emailId).getValue();
+        String url = String.format(CORE_HOST_URL_PREFIX + CORE_GET_EM_DETAILS_URI, emailId);
         ApacheHttpClient apacheHttpClient = new ApacheHttpClient();
         String response = HttpClientUtils.processResponse(apacheHttpClient.get(url, null), "Error while getting skills");
         JSONObject jsonObject = new JSONObject(response);

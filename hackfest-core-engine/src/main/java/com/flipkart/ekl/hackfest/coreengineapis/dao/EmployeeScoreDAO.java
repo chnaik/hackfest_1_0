@@ -7,8 +7,7 @@ import org.hibernate.LockOptions;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by chaitanya.naik on 26/02/16.
@@ -78,20 +77,45 @@ public class EmployeeScoreDAO extends AbstractDAO<EmployeeScore> {
                     
                 }
                 hm.put(result.getEmployee().getId(), result2);
+                result2.setScore_value(0.0F);
             }
-            result2.setScore_value(0.0F);
             if (EmployeeScore.ScoreType.PRODUCTIVITY.toString().equals(result.getScore_type())) {
                 result2.setScore_value(result2.getScore_value() + result.getScore_value() * 10);
             } else if (EmployeeScore.ScoreType.SKILLS.toString().equals(result.getScore_type())) {
                 result2.setScore_value(result2.getScore_value() + result.getScore_value() * 20);
             } else if (EmployeeScore.ScoreType.STRETCH_ASSIGNMENT.toString().equals(result.getScore_type())) {
-                result2.setScore_value(result2.getScore_value() + result.getScore_value() * 50);
+                result2.setScore_value(result2.getScore_value() + result.getScore_value() * 50);result2.setScore_value(result2.getScore_value() + result.getScore_value() * 50);
             } else if (EmployeeScore.ScoreType.TECH_FORUM.toString().equals(result.getScore_type())) {
                 result2.setScore_value(result2.getScore_value() + result.getScore_value() * 20);
             }
         }
         for (EmployeeScore score : hm.values()) {
             persist(score);
+        }
+        float i = 0;
+        List<EmployeeScore> pm = new ArrayList<EmployeeScore>(hm.values());
+        Collections.sort(pm, new Comparator<EmployeeScore>() {
+            @Override
+            public int compare(EmployeeScore o1, EmployeeScore o2) {
+                return -1 * Float.compare(o1.getScore_value(), o2.getScore_value());
+            }
+        });
+        float percentile = 0.0F;
+        for (EmployeeScore score : pm) {
+            percentile = (pm.size() - i)/pm.size();
+            percentile *= 100;
+            Criteria criteria3 = criteria();
+            criteria3.add(Restrictions.eq("score_type", EmployeeScore.ScoreType.PERCENTILE.toString()));
+            criteria3.add(Restrictions.eq("employee.id", score.getEmployee().getId()));
+            EmployeeScore result = uniqueResult(criteria3);
+            if (result == null) {
+                result = new EmployeeScore();
+                result.setEmployee(score.getEmployee());
+                result.setScore_type(EmployeeScore.ScoreType.PERCENTILE.toString());
+            }
+            result.setScore_value(percentile);
+            persist(result);
+            i++;
         }
     }
 

@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 <#-- @ftlvariable name="" type="com.flipkart.ekl.hackfest.views.DashboardView" -->
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -59,7 +59,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="main">
-            <h4 class="page-header">Hello ${employee.name}, Your overall score is ${employee.score} and percentile is ${employee.percentile}</h4>
+            <h4 class="page-header">Hello <span class='emp_name'></span>, Your overall score is ${employee.score} and percentile is ${employee.percentile}</h4>
 
 
             <div class="row">
@@ -132,7 +132,7 @@
                                         </#list>
                                     </ul>
                                     <hr/>
-                                    <a href="#" class="btn btn-warning ">View more...</a>
+                                    <a href="http://ekl-lm-app-001-stage.ch.flipkart.com/index.php/unanswered/" class="btn btn-warning ">View more...</a>
                                 </div>
 
                             </div>
@@ -170,7 +170,7 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <a href="#" class="btn btn-success ">View More...</a>
+                                            <a href="http://ekl-lm-app-001-stage.ch.flipkart.com/moodle/" class="btn btn-success ">View More...</a>
                                         </div>
                                     </div>
                                     <div class="panel panel-default">
@@ -198,7 +198,7 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <a href="#" class="btn btn-success ">View More...</a>
+                                            <a href="http://ekl-lm-app-001-stage.ch.flipkart.com/moodle/" class="btn btn-success ">View More...</a>
                                         </div>
                                     </div>
                                 </div>
@@ -225,7 +225,7 @@
                                         <tr>
                                             <th>#</th>
                                             <th>Name</th>
-                                            <th>Rating</th>
+
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -233,7 +233,7 @@
                                             <tr>
                                                 <td>${leader?index + 1}</td>
                                                 <td>${leader.name}</td>
-                                                <td><div class="rateYo" value="${leader.rating}"><input type="hidden" value="${leader.rating}"/></div></td>
+
                                             </tr>
                                         </#list>
                                         </tbody>
@@ -258,12 +258,17 @@
 <script src="http://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.0.1/jquery.rateyo.min.js"></script>
 <script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"  type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.js"></script>
+
 <script>
     function onLoad() {
         gapi.load('auth2', function() {
+            console.log("Gapi loading..");
             gapi.auth2.init({
             client_id: '1039857374119-7cvdetqsa9mfb7lo4ken8va0umkeupls.apps.googleusercontent.com'
         });
+            console.log("Gapi loaded..");
         })}
 //    window.onLoadCallback = function(){
 //        gapi.auth2.init({
@@ -284,6 +289,25 @@
 <script>
     $(document).ready(function () {
 
+//        gapi.load('auth2', function() {
+//            console.log("Gapi loading..");
+//            gapi.auth2.init({
+//                client_id: '1039857374119-7cvdetqsa9mfb7lo4ken8va0umkeupls.apps.googleusercontent.com'
+//            });
+//            console.log("Gapi loaded..")});
+        function getCookie(cname) {
+            var name = cname + "=";
+            var ca = document.cookie.split(';');
+            for(var i=0; i<ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0)==' ') c = c.substring(1);
+                if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+            }
+            return "";
+        }
+
+        console.log(getCookie('name'));
+        $('.emp_name').html(getCookie('name'));
         var data = {
             labels: ["January", "February", "March", "April", "May", "June", "July"],
             datasets: [
@@ -318,7 +342,9 @@
                 starWidth: "20px"
             });
         });
+
     });
+
 </script>
 </body>
 </html>
